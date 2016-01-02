@@ -54,6 +54,7 @@ void MainWindow::livecodingDisconnected()
 {
     mSyncer.setLivecodingBot(nullptr);
     addLogMessage("[Livecoding] Disconnected...");
+    ui->buttonConnectLivecoding->setEnabled(true);
 }
 
 void MainWindow::livecodingMessageReceived(const QString & from, const QString & message)
@@ -71,6 +72,7 @@ void MainWindow::twitchDisconnected()
 {
     mSyncer.setTwitchBot(nullptr);
     addLogMessage("[Twitch] Disconnected...");
+    ui->buttonConnectTwitch->setEnabled(true);
 }
 
 void MainWindow::twitchMessageReceived(const QString & from, const QString & message)
@@ -94,7 +96,7 @@ void MainWindow::on_buttonConnectLivecoding_clicked()
     ui->buttonConnectLivecoding->setEnabled(false);
 
     mLivecodingBot = new LivecodingBot(mLivecoding, this);
-    connect(mLivecodingBot, SIGNAL(addLogMessage(QString)), this, SLOT(addLogMessage(QString)));
+    connect(mLivecodingBot, SIGNAL(logMessage(QString)), this, SLOT(addLogMessage(QString)));
     connect(mLivecodingBot, SIGNAL(connected()), this, SLOT(livecodingConnected()));
     connect(mLivecodingBot, SIGNAL(disconnected()), this, SLOT(livecodingDisconnected()));
     connect(mLivecodingBot, SIGNAL(messageReceived(QString,QString)), this, SLOT(livecodingMessageReceived(QString,QString)));
@@ -106,7 +108,7 @@ void MainWindow::on_buttonConnectTwitch_clicked()
     ui->buttonConnectTwitch->setEnabled(false);
 
     mTwitchBot = new TwitchBot(mTwitch, this);
-    connect(mTwitchBot, SIGNAL(addLogMessage(QString)), this, SLOT(addLogMessage(QString)));
+    connect(mTwitchBot, SIGNAL(logMessage(QString)), this, SLOT(addLogMessage(QString)));
     connect(mTwitchBot, SIGNAL(connected()), this, SLOT(twitchConnected()));
     connect(mTwitchBot, SIGNAL(disconnected()), this, SLOT(twitchDisconnected()));
     connect(mTwitchBot, SIGNAL(messageReceived(QString,QString)), this, SLOT(twitchMessageReceived(QString,QString)));

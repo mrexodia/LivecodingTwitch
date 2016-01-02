@@ -6,3 +6,8 @@ ChatBot::ChatBot(const ChatConfig & config, QObject* parent)
       mConfig(config)
 {
 }
+
+void ChatBot::addLogMessage(const QString & message)
+{
+    emit logMessage(message);
+}

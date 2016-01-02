@@ -23,13 +23,15 @@ public:
     virtual void SendMessage(const QString & message) = 0;
 
 signals:
-    void addLogMessage(const QString & message);
+    void logMessage(const QString & message);
     void connected();
     void disconnected();
     void messageReceived(const QString & from, const QString & message);
 
 protected:
     ChatConfig mConfig;
+
+    void addLogMessage(const QString & message);
 };
 
 #endif // CHATBOT_H

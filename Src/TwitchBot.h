@@ -2,6 +2,8 @@
 #define TWITCHBOT_H
 
 #include "ChatBot.h"
+#include <QTimer>
+#include <QMutex>
 #include <IrcConnection>
 #include <IrcCommand>
 #include <Irc>
@@ -20,9 +22,14 @@ signals:
 
 private slots:
     void processIrcMessage(IrcMessage* message);
+    void resetLimit();
 
 private:
     IrcConnection mConnection;
+    int mMessagesSent;
+    int mMessageLimit;
+    QList<QString> mMessageQueue;
+    QTimer* mLimitTimer;
 };
 
 #endif // TWITCHBOT_H
