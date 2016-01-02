@@ -12,6 +12,8 @@ class TwitchBot : public ChatBot
 public:
     explicit TwitchBot(const ChatConfig & config, QObject* parent = 0);
     void Connect() override;
+    void Disconnect() override;
+    bool IsConnected() override;
     void SendMessage(const QString & message) override;
 
 signals:
@@ -20,7 +22,6 @@ private slots:
     void processIrcMessage(IrcMessage* message);
 
 private:
-    ChatConfig mConfig;
     IrcConnection mConnection;
 };
 

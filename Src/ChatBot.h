@@ -16,8 +16,10 @@ class ChatBot : public QObject
 {
     Q_OBJECT
 public:
-    explicit ChatBot(QObject* parent = 0);
+    explicit ChatBot(const ChatConfig & config, QObject* parent = 0);
     virtual void Connect() = 0;
+    virtual void Disconnect() = 0;
+    virtual bool IsConnected() = 0;
     virtual void SendMessage(const QString & message) = 0;
 
 signals:
@@ -25,6 +27,9 @@ signals:
     void connected();
     void disconnected();
     void messageReceived(const QString & from, const QString & message);
+
+protected:
+    ChatConfig mConfig;
 };
 
 #endif // CHATBOT_H

@@ -24,7 +24,7 @@ static ChatConfig getChatConfig(QSettings & settings, const QString & chat, cons
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QSettings settings(QApplication::applicationDirPath() + "/setting.ini", QSettings::IniFormat);
+    QSettings settings(QApplication::applicationDirPath() + "/settings.ini", QSettings::IniFormat);
     MainWindow w(getChatConfig(settings, "Livecoding", "livecoding.tv"), getChatConfig(settings, "Twitch", "irc.twitch.tv"));
     w.show();
     return a.exec();

@@ -6,21 +6,35 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
+    <width>782</width>
     <height>385</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>LivecodingTwitch</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>3</number>
+    </property>
     <item>
-     <widget class="QPushButton" name="buttonConnect">
-      <property name="text">
-       <string>&amp;Connect!</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="buttonConnectTwitch">
+        <property name="text">
+         <string>&amp;Connect to Twitch!</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="buttonConnectLivecoding">
+        <property name="text">
+         <string>Connect to Livecoding!</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QTextEdit" name="textLog">
@@ -39,6 +53,23 @@ p, li { white-space: pre-wrap; }
       </property>
      </widget>
     </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="editMessage"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="buttonSend">
+        <property name="text">
+         <string>&amp;Send</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -46,7 +77,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>650</width>
+     <width>782</width>
      <height>21</height>
     </rect>
    </property>
@@ -65,6 +96,30 @@ p, li { white-space: pre-wrap; }
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>buttonConnectTwitch</tabstop>
+  <tabstop>buttonConnectLivecoding</tabstop>
+  <tabstop>textLog</tabstop>
+  <tabstop>editMessage</tabstop>
+  <tabstop>buttonSend</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>editMessage</sender>
+   <signal>returnPressed()</signal>
+   <receiver>buttonSend</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>531</x>
+     <y>363</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>588</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

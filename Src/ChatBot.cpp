@@ -1,7 +1,8 @@
 #include "ChatBot.h"
 #include <QMessageBox>
 
-ChatBot::ChatBot(QObject* parent) : QObject(parent)
+ChatBot::ChatBot(const ChatConfig & config, QObject* parent)
+    : QObject(parent),
+      mConfig(config)
 {
 }
-

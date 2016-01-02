@@ -2,9 +2,8 @@
 #include <IrcBuffer>
 
 TwitchBot::TwitchBot(const ChatConfig & config, QObject* parent)
-    : mConfig(config),
-      mConnection(config.server, this),
-      ChatBot(parent)
+    : ChatBot(config, parent),
+      mConnection(config.server, this)
 {
     if(!mConfig.channel.startsWith("#"))
         mConfig.channel.prepend('#');
@@ -24,6 +23,16 @@ void TwitchBot::Connect()
     SendMessage(mConfig.welcome);
 
     mConnection.open();
+}
+
+void TwitchBot::Disconnect()
+{
+    mConnection.close();
+}
+
+bool TwitchBot::IsConnected()
+{
+    return mConnection.isConnected();
 }
 
 void TwitchBot::SendMessage(const QString & message)
