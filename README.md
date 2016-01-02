@@ -1,6 +1,6 @@
 # LivecodingTwitch
 
-Bot to synchronize [Livecoding](https://livecoding.tv) and [Twitch](https://twitch.tv) stream chats. This application is designed for streamers who want to stream on both services, but only use one of the chat clients.
+Bot to synchronize [Livecoding](https://livecoding.tv) and [Twitch](https://twitch.tv) stream chats. This application is designed for streamers who want to stream on both services, but only use one of the chat clients. It is recommended to create separate accounts that run the chatbot.
 
 # Compiling
 
@@ -11,7 +11,7 @@ Bot to synchronize [Livecoding](https://livecoding.tv) and [Twitch](https://twit
 4. Open and compile `Src/LivecodingTwitch.pro` in the same directory as `qxmpp` and `libcommuni`;
 5. Have fun!
 
-*Notice*: On Ubuntu you need to install `libgl1-mesa-dev` and `g++`.
+*Notice*: On Ubuntu you need to install `libgl1-mesa-dev` and `g++`. You may also need to copy the shared libraries to the appropriate directories.
 
 # Configuration
 

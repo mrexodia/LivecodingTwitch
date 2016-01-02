@@ -28,6 +28,7 @@ private:
     QXmppMucManager* mMucManager;
     QXmppMucRoom* mRoom;
     QXmppClient mClient;
+    QString mLastSent;
 };
 
 #endif // LIVECODINGBOT_H

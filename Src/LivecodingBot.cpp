@@ -43,6 +43,7 @@ void LivecodingBot::SendMessage(const QString & message)
         addLogMessage("[Livecoding] <font color=\"red\">Not connected...</font>");
         return;
     }
+    mLastSent = message;
     mRoom->sendMessage(message);
 }
 
@@ -65,8 +66,10 @@ void LivecodingBot::handleXmppMessage(QXmppMessage message)
     if(idx == -1)
         return;
     QString username = jid.right(jid.length() - idx - 1);
-    if(username != mConfig.user)
-        messageReceived(username, EscapeHtml(message.body()));
+    QString body = message.body();
+    if(body != mLastSent) //don't repeat messages sent by this client
+        messageReceived(username, EscapeHtml(body));
+    mLastSent = "";
 }
 
 void LivecodingBot::handleXmppConnect()

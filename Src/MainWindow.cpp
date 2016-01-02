@@ -140,5 +140,10 @@ void MainWindow::handleConnectDisconnect(ChatBot* bot, QPushButton* button)
     if(bot->IsConnected())
         bot->Disconnect();
     else
-        bot->Connect();
+    {
+        if(bot->CheckConfig())
+            bot->Connect();
+        else
+            addLogMessage(QString("<font color=\"red\">Invalid configuration for <b>%1</b>...</font>").arg(bot->Name()));
+    }
 }

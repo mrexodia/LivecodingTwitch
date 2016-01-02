@@ -25,7 +25,7 @@ TwitchBot::TwitchBot(const ChatConfig & config, QObject* parent)
 
 void TwitchBot::Connect()
 {
-    addLogMessage(QString("[Twitch] Connecting to %1 as %2...").arg(mConfig.server, mConfig.user));
+    addLogMessage(QString("[Twitch] Connecting to <i>%1</i> as <i>%2</i>...").arg(mConfig.server, mConfig.user));
 
     mLimitTimer->start();
 
@@ -88,7 +88,7 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
             if(!i)
                 addLogMessage("[Twitch] Capabilities: " + caps[i]);
             else
-                addLogMessage("                       " + caps[i]);
+                addLogMessage("\t" + caps[i]);
         }
 #endif //_DEBUG
     }
@@ -104,7 +104,7 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
             if(!i)
                 addLogMessage("[Twitch] Names: " + names[i]);
             else
-                addLogMessage("                " + names[i]);
+                addLogMessage("\t" + names[i]);
         }
 #endif //_DEBUG
     }
@@ -119,7 +119,7 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
             if(!i)
                 addLogMessage("[Twitch] MOTD: " + lines[i]);
             else
-                addLogMessage("               " + lines[i]);
+                addLogMessage("\t" + lines[i]);
         }
     }
     break;
@@ -127,7 +127,7 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
     case IrcMessage::Join:
     {
         auto join = (IrcJoinMessage*)message;
-        addLogMessage(QString("[Twitch] Joined %1 as %2").arg(join->channel(), join->nick()));
+        addLogMessage(QString("[Twitch] Joined <i>%1</i> as <i>%2</i>").arg(join->channel(), join->nick()));
     }
     break;
 
@@ -184,7 +184,7 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
             "HostChange",
             "Batch"
         };
-        addLogMessage(QString("[Twitch] Unimplemented IrcMessage::type() = %1").arg(types[message->type()]));
+        addLogMessage(QString("[Twitch] Unimplemented IrcMessage::type() = <b>%1</b>").arg(types[message->type()]));
     }
     break;
     }

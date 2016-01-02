@@ -11,3 +11,8 @@ void ChatBot::addLogMessage(const QString & message)
 {
     emit logMessage(message);
 }
+
+bool ChatBot::CheckConfig()
+{
+    return mConfig.channel.length() && mConfig.pass.length() && mConfig.server.length() && mConfig.user.length();
+}
