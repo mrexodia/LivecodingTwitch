@@ -1,6 +1,6 @@
 # LivecodingTwitch
 
-Bot to synchronize Livecoding and Twitch chats.
+Bot to synchronize [Livecoding](https://livecoding.tv) and [Twitch](https://twitch.tv) stream chats. This application is designed for streamers who want to stream on both services, but only use one of the chat clients.
 
 # Compiling
 
@@ -10,6 +10,8 @@ Bot to synchronize Livecoding and Twitch chats.
 3. Open and compile `Src/qxmpp/qxmpp.pro` in the same directory as `libcommuni`;
 4. Open and compile `Src/LivecodingTwitch.pro` in the same directory as `qxmpp` and `libcommuni`;
 5. Have fun!
+
+*Notice*: On Ubuntu you need to install `libgl1-mesa-dev` and `g++`.
 
 # Configuration
 
@@ -21,7 +23,7 @@ Bot to synchronize Livecoding and Twitch chats.
 [Twitch]
 server=irc.twitch.tv
 user=twitchUsername
-pass=twitchPassword
+pass=twitchOauth
 channel=#twitchChannel
 welcome="Hello, I will be syncing between Livecoding/Twitch today!"
 
@@ -34,7 +36,7 @@ welcome="Hello, I will be syncing between Livecoding/Twitch today!"
 ``` 
 
 1. Replace `twitchUsername` with your Twitch username;
-2. Replace `twitchPassword` with the OAuth token from [here](http://www.twitchapps.com/tmi);
+2. Replace `twitchOauth` with the OAuth token from [here](http://www.twitchapps.com/tmi);
 3. Replace `twitchChannel` with your Twitch channel you want to sync with (`http://twitch.tv/twitchChannel`). **Make sure** to leave the `#` in front of `twitchChannel`!
 4.  Replace `livecodingUsername` with your Livecoding username;
 5.  Replace `livecodingPassword` with your Livecoding password. See [here](http://blog.livecoding.tv/2015/11/21/how-to-chat-onal-xmpp-client) how to set your password if you logged in with a social account;
