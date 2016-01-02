@@ -18,6 +18,7 @@ DESTDIR = $$OUT_PWD/bin
 # libcommuni
 IRC_MODULES = IrcCore IrcModel IrcUtil
 IRC_BUILDDIR = $$OUT_PWD
+DEFINES += IRC_SHARED
 include(libcommuni/src/module_deps.pri)
 
 # qxmpp
