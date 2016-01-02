@@ -1,0 +1,6 @@
+[submodule "Src/libcommuni"]
+	path = Src/libcommuni
+	url = https://github.com/communi/libcommuni.git
+[submodule "Src/qxmpp"]
+	path = Src/qxmpp
+	url = https://github.com/qxmpp-project/qxmpp.git
