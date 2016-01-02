@@ -16,11 +16,13 @@ public:
     void Disconnect() override;
     bool IsConnected() override;
     void SendMessage(const QString & message) override;
+    QString Name() override;
 
 private slots:
     void handleXmppPresence(QXmppPresence room);
     void handleXmppMessage(QXmppMessage message);
     void handleXmppConnect();
+    void handleXmppError(QXmppClient::Error error);
 
 private:
     QXmppMucManager* mMucManager;

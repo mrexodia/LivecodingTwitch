@@ -1,6 +1,7 @@
 #include "TwitchBot.h"
 #include <IrcBuffer>
 #include <QMessageBox>
+#include <QtGui/qtextdocument.h>
 
 TwitchBot::TwitchBot(const ChatConfig & config, QObject* parent)
     : ChatBot(config, parent),
@@ -11,30 +12,35 @@ TwitchBot::TwitchBot(const ChatConfig & config, QObject* parent)
 {
     if(!mConfig.channel.startsWith("#"))
         mConfig.channel.prepend('#');
+
     connect(&mConnection, SIGNAL(disconnected()), this, SIGNAL(disconnected()));
     connect(&mConnection, SIGNAL(connected()), this, SIGNAL(connected()));
     connect(&mConnection, SIGNAL(messageReceived(IrcMessage*)), this, SLOT(processIrcMessage(IrcMessage*)));
 
     //http://help.twitch.tv/customer/portal/articles/1302780-twitch-irc
     connect(mLimitTimer, SIGNAL(timeout()), this, SLOT(resetLimit()));
-    mLimitTimer->start(29 * 1000);
+    mLimitTimer->setInterval(29 * 1000);
+    mLimitTimer->setSingleShot(false);
 }
 
 void TwitchBot::Connect()
 {
+    addLogMessage(QString("[Twitch] Connecting to %1 as %2...").arg(mConfig.server, mConfig.user));
+
+    mLimitTimer->start();
+
     mConnection.setUserName(mConfig.user);
     mConnection.setNickName(mConfig.user);
     mConnection.setRealName(mConfig.user);
     mConnection.setPassword(mConfig.pass);
-
     mConnection.sendCommand(IrcCommand::createJoin(mConfig.channel));
-    SendMessage(mConfig.welcome);
-
+    mConnection.sendCommand(IrcCommand::createMessage(mConfig.channel, mConfig.welcome));
     mConnection.open();
 }
 
 void TwitchBot::Disconnect()
 {
+    mLimitTimer->stop();
     mConnection.close();
 }
 
@@ -45,17 +51,27 @@ bool TwitchBot::IsConnected()
 
 void TwitchBot::SendMessage(const QString & message)
 {
+    if(!IsConnected())
+    {
+        addLogMessage("[Twitch] <font color=\"red\">Not connected...</font>");
+        return;
+    }
     if(!message.length())
         return;
     if(mMessagesSent >= mMessageLimit)
     {
         mMessageQueue.append(message);
 #ifdef _DEBUG
-        addLogMessage(QString("[Twitch] Queued message %1").arg(message));
+        addLogMessage(QString("[Twitch] Queued message %1").arg(Qt::escape(message)));
 #endif //_DEBUG
     }
     mMessagesSent++;
     mConnection.sendCommand(IrcCommand::createMessage(mConfig.channel, message));
+}
+
+QString TwitchBot::Name()
+{
+    return "Twitch";
 }
 
 void TwitchBot::processIrcMessage(IrcMessage* message)
@@ -64,6 +80,7 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
     {
     case IrcMessage::Capability:
     {
+#ifdef _DEBUG
         auto cap = (IrcCapabilityMessage*)message;
         auto caps = cap->capabilities();
         for(int i=0;i<caps.length();i++)
@@ -73,6 +90,7 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
             else
                 addLogMessage("                       " + caps[i]);
         }
+#endif //_DEBUG
     }
     break;
 
@@ -116,7 +134,7 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
     case IrcMessage::Private:
     {
         auto priv = (IrcPrivateMessage*)message;
-        messageReceived(priv->nick(), priv->content());
+        messageReceived(priv->nick(), Qt::escape(priv->content()));
     }
     break;
 
@@ -126,6 +144,13 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
         auto num = (IrcNumericMessage*)message;
         addLogMessage(QString("[Twitch] Code: %1").arg(num->code()));
 #endif //_DEBUG
+    }
+    break;
+
+    case IrcMessage::Notice:
+    {
+        auto notice = (IrcNoticeMessage*)message;
+        addLogMessage(QString("[Twitch] Notice: <b>%1</b>").arg(notice->content()));
     }
     break;
 

@@ -17,6 +17,7 @@ public:
     void Disconnect() override;
     bool IsConnected() override;
     void SendMessage(const QString & message) override;
+    QString Name() override;
 
 signals:
 

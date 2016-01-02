@@ -39,3 +39,6 @@ HEADERS  += MainWindow.h \
     MainWindowCloseThread.h
 
 FORMS    += MainWindow.ui
+
+RESOURCES += \
+    resources.qrc

@@ -1,19 +1,29 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include <QScrollBar>
+#include <QMessageBox>
+#include <QtGui/qtextdocument.h>
 
-MainWindow::MainWindow(ChatConfig livecoding, ChatConfig twitch, QWidget* parent)
+MainWindow::MainWindow(const ChatConfig & livecoding, const ChatConfig & twitch, QWidget* parent)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
-      mLivecoding(livecoding),
-      mLivecodingBot(nullptr),
-      mTwitch(twitch),
-      mTwitchBot(nullptr),
+      mLivecodingBot(new LivecodingBot(livecoding, this)),
+      mTwitchBot(new TwitchBot(twitch, this)),
       mCanClose(false),
       mCloseThread(new MainWindowCloseThread)
 {
     ui->setupUi(this);
     connect(mCloseThread, SIGNAL(canClose()), this, SLOT(canClose()));
+
+    connect(mLivecodingBot, SIGNAL(logMessage(QString)), this, SLOT(addLogMessage(QString)));
+    connect(mLivecodingBot, SIGNAL(connected()), this, SLOT(livecodingConnected()));
+    connect(mLivecodingBot, SIGNAL(disconnected()), this, SLOT(livecodingDisconnected()));
+    connect(mLivecodingBot, SIGNAL(messageReceived(QString,QString)), this, SLOT(livecodingMessageReceived(QString,QString)));
+
+    connect(mTwitchBot, SIGNAL(logMessage(QString)), this, SLOT(addLogMessage(QString)));
+    connect(mTwitchBot, SIGNAL(connected()), this, SLOT(twitchConnected()));
+    connect(mTwitchBot, SIGNAL(disconnected()), this, SLOT(twitchDisconnected()));
+    connect(mTwitchBot, SIGNAL(messageReceived(QString,QString)), this, SLOT(twitchMessageReceived(QString,QString)));
 }
 
 MainWindow::~MainWindow()
@@ -46,15 +56,18 @@ void MainWindow::addLogMessage(const QString & message)
 
 void MainWindow::livecodingConnected()
 {
-    mSyncer.setLivecodingBot(mLivecodingBot);
     addLogMessage("[Livecoding] Connected!");
+    mSyncer.setLivecodingBot(mLivecodingBot);
+    ui->buttonConnectLivecoding->setEnabled(true);
+    ui->buttonConnectLivecoding->setText("Disconnect from Livecoding");
 }
 
 void MainWindow::livecodingDisconnected()
 {
-    mSyncer.setLivecodingBot(nullptr);
     addLogMessage("[Livecoding] Disconnected...");
+    mSyncer.setLivecodingBot(nullptr);
     ui->buttonConnectLivecoding->setEnabled(true);
+    ui->buttonConnectLivecoding->setText("Connect to Livecoding");
 }
 
 void MainWindow::livecodingMessageReceived(const QString & from, const QString & message)
@@ -64,15 +77,18 @@ void MainWindow::livecodingMessageReceived(const QString & from, const QString &
 
 void MainWindow::twitchConnected()
 {
-    mSyncer.setTwitchBot(mTwitchBot);
     addLogMessage("[Twitch] Connected!");
+    mSyncer.setTwitchBot(mTwitchBot);
+    ui->buttonConnectTwitch->setEnabled(true);
+    ui->buttonConnectTwitch->setText("Disconnect from Twitch");
 }
 
 void MainWindow::twitchDisconnected()
 {
-    mSyncer.setTwitchBot(nullptr);
     addLogMessage("[Twitch] Disconnected...");
+    mSyncer.setTwitchBot(nullptr);
     ui->buttonConnectTwitch->setEnabled(true);
+    ui->buttonConnectTwitch->setText("Connect to Twitch");
 }
 
 void MainWindow::twitchMessageReceived(const QString & from, const QString & message)
@@ -93,35 +109,37 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_buttonConnectLivecoding_clicked()
 {
-    ui->buttonConnectLivecoding->setEnabled(false);
-
-    mLivecodingBot = new LivecodingBot(mLivecoding, this);
-    connect(mLivecodingBot, SIGNAL(logMessage(QString)), this, SLOT(addLogMessage(QString)));
-    connect(mLivecodingBot, SIGNAL(connected()), this, SLOT(livecodingConnected()));
-    connect(mLivecodingBot, SIGNAL(disconnected()), this, SLOT(livecodingDisconnected()));
-    connect(mLivecodingBot, SIGNAL(messageReceived(QString,QString)), this, SLOT(livecodingMessageReceived(QString,QString)));
-    mLivecodingBot->Connect();
+    handleConnectDisconnect(mLivecodingBot, ui->buttonConnectLivecoding);
 }
 
 void MainWindow::on_buttonConnectTwitch_clicked()
 {
-    ui->buttonConnectTwitch->setEnabled(false);
-
-    mTwitchBot = new TwitchBot(mTwitch, this);
-    connect(mTwitchBot, SIGNAL(logMessage(QString)), this, SLOT(addLogMessage(QString)));
-    connect(mTwitchBot, SIGNAL(connected()), this, SLOT(twitchConnected()));
-    connect(mTwitchBot, SIGNAL(disconnected()), this, SLOT(twitchDisconnected()));
-    connect(mTwitchBot, SIGNAL(messageReceived(QString,QString)), this, SLOT(twitchMessageReceived(QString,QString)));
-    mTwitchBot->Connect();
+    handleConnectDisconnect(mTwitchBot, ui->buttonConnectTwitch);
 }
 
 void MainWindow::on_buttonSend_clicked()
 {
     QString message = ui->editMessage->text();
+    addLogMessage(QString("<b>me</b> %1").arg(Qt::escape(message)));
     ui->editMessage->clear();
     if(mLivecodingBot)
         mLivecodingBot->SendMessage(message);
     if(mTwitchBot)
         mTwitchBot->SendMessage(message);
-    addLogMessage(QString("<b>me</b> %1").arg(message));
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QString about = "LivecodingTwitch v1.0<br><br>Coded by <a href=\"http://mrexodia.cf\">mrexodia</a>.<br>Licensed under <a href=\"https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html\">GPLv2</a>.<br>Code on <a href=\"https://github.com/mrexodia/LivecodingTwitch\">GitHub</a>.<br>Icon by <a href=\"https://icons8.com\">Icons8</a>.";
+    QMessageBox::information(this, "About", about);
+}
+
+void MainWindow::handleConnectDisconnect(ChatBot* bot, QPushButton* button)
+{
+    button->setEnabled(false);
+
+    if(bot->IsConnected())
+        bot->Disconnect();
+    else
+        bot->Connect();
 }

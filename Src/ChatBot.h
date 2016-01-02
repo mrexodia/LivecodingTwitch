@@ -21,6 +21,7 @@ public:
     virtual void Disconnect() = 0;
     virtual bool IsConnected() = 0;
     virtual void SendMessage(const QString & message) = 0;
+    virtual QString Name() = 0;
 
 signals:
     void logMessage(const QString & message);

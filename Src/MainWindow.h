@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QCloseEvent>
+#include <QPushButton>
 #include "TwitchBot.h"
 #include "LivecodingBot.h"
 #include "BotSyncer.h"
@@ -18,7 +19,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(ChatConfig livecoding, ChatConfig twitch, QWidget* parent = nullptr);
+    explicit MainWindow(const ChatConfig & livecoding, const ChatConfig & twitch, QWidget* parent = nullptr);
     ~MainWindow();
 
 protected:
@@ -38,16 +39,17 @@ private slots:
     void on_buttonConnectLivecoding_clicked();
     void on_buttonConnectTwitch_clicked();
     void on_buttonSend_clicked();
+    void on_actionAbout_triggered();
 
 private:
     Ui::MainWindow *ui;
-    ChatConfig mLivecoding;
     LivecodingBot* mLivecodingBot;
-    ChatConfig mTwitch;
     TwitchBot* mTwitchBot;
     BotSyncer mSyncer;
     bool mCanClose;
     MainWindowCloseThread* mCloseThread;
+
+    void handleConnectDisconnect(ChatBot* bot, QPushButton* button);
 };
 
 #endif // MAINWINDOW_H
