@@ -8,6 +8,9 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+unix:QMAKE_CXXFLAGS += -std=c++11
+win32:RC_FILE = icon.rc
+
 TARGET = LivecodingTwitch
 TEMPLATE = app
 DESTDIR = $$OUT_PWD/bin
