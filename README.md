@@ -2,7 +2,11 @@
 
 Bot to synchronize [Livecoding](https://livecoding.tv) and [Twitch](https://twitch.tv) stream chats. This application is designed for streamers who want to stream on both services, but only use one of the chat clients. It is recommended to create separate accounts that run the chatbot.
 
+Feature requests/bug reports go [here](https://github.com/mrexodia/LivecodingTwitch/issues).
+
 # Compiling
+
+*You can skip this step if you downloaded a binary release.*
 
 1. Clone the project (make sure to [clone the submodules](http://stackoverflow.com/questions/3796927/how-to-git-clone-including-submodules));
 1. Install [Qt](http://www.qt.io/download);
