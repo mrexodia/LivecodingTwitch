@@ -11,7 +11,9 @@ LivecodingBot::LivecodingBot(const ChatConfig & config, QObject* parent)
     connect(&mClient, SIGNAL(disconnected()), this, SIGNAL(disconnected()));
     connect(&mClient, SIGNAL(presenceReceived(QXmppPresence)), this, SLOT(handleXmppPresence(QXmppPresence)));
     connect(&mClient, SIGNAL(error(QXmppClient::Error)), this, SLOT(handleXmppError(QXmppClient::Error)));
+#ifdef _DEBUG
     mClient.logger()->setLoggingType(QXmppLogger::StdoutLogging);
+#endif
 
     mMucManager = new QXmppMucManager;
     mClient.addExtension(mMucManager);
@@ -56,6 +58,8 @@ void LivecodingBot::handleXmppPresence(QXmppPresence presence)
 {
 #ifdef _DEBUG
     addLogMessage(QString("[Livecoding] Got presence from %1").arg(presence.from()));
+#else
+    Q_UNUSED(presence);
 #endif //_DEBUG
 }
 
@@ -67,7 +71,7 @@ void LivecodingBot::handleXmppMessage(QXmppMessage message)
         return;
     QString username = jid.right(jid.length() - idx - 1);
     QString body = message.body();
-    if(body != mLastSent) //don't repeat messages sent by this client
+    if(body != mLastSent && message.stamp().isNull()) //don't repeat messages sent by this client
         messageReceived(username, EscapeHtml(body));
     mLastSent = "";
 }

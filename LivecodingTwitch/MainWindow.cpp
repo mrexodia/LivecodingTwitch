@@ -119,6 +119,8 @@ void MainWindow::on_buttonConnectTwitch_clicked()
 void MainWindow::on_buttonSend_clicked()
 {
     QString message = ui->editMessage->text();
+    if(!message.length())
+        return;
     addLogMessage(QString("<b>me</b> %1").arg(EscapeHtml(message)));
     ui->editMessage->clear();
     if(mLivecodingBot)

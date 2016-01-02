@@ -1,6 +1,6 @@
-[submodule "Src/libcommuni"]
-	path = Src/libcommuni
+[submodule "qxmpp"]
+	path = qxmpp
+	url = http://github.com/mrexodia/qxmpp
+[submodule "libcommuni"]
+	path = libcommuni
 	url = https://github.com/communi/libcommuni.git
-[submodule "Src/qxmpp"]
-	path = Src/qxmpp
-	url = https://github.com/mrexodia/qxmpp.git

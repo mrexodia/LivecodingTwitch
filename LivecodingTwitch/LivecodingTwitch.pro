@@ -19,13 +19,13 @@ DESTDIR = $$OUT_PWD/bin
 IRC_MODULES = IrcCore IrcModel IrcUtil
 IRC_BUILDDIR = $$OUT_PWD
 DEFINES += IRC_SHARED
-include(libcommuni/src/module_deps.pri)
+include(../libcommuni/src/module_deps.pri)
 
 # qxmpp
-include(qxmpp/qxmpp.pri)
+include(../qxmpp/qxmpp.pri)
 INCLUDEPATH += $$QXMPP_INCLUDEPATH
 LIBS += $$QXMPP_LIBS
-QMAKE_LIBDIR += $$OUT_PWD/src
+QMAKE_LIBDIR += $$OUT_PWD/lib
 
 SOURCES += main.cpp\
     MainWindow.cpp \

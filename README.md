@@ -6,9 +6,9 @@ Bot to synchronize [Livecoding](https://livecoding.tv) and [Twitch](https://twit
 
 1. Clone the project (make sure to [clone the submodules](http://stackoverflow.com/questions/3796927/how-to-git-clone-including-submodules));
 1. Install [Qt](http://www.qt.io/download);
-2. Open and compile `Src/libcommuni/libcommuni.pro` with Qt creator in a directory (for example `build-x64-debug`);
-3. Open and compile `Src/qxmpp/qxmpp.pro` in the same directory as `libcommuni`;
-4. Open and compile `Src/LivecodingTwitch.pro` in the same directory as `qxmpp` and `libcommuni`;
+2. Open and compile `libcommuni/libcommuni.pro` with Qt creator in a directory (for example `build-x64-debug`);
+3. Open and compile `qxmpp/qxmpp.pro` in the same directory as `libcommuni`;
+4. Open and compile `LivecodingTwitch/LivecodingTwitch.pro` in the same directory as `qxmpp` and `libcommuni`;
 5. Have fun!
 
 *Notice*: On Ubuntu you need to install `libgl1-mesa-dev` and `g++`. You may also need to copy the shared libraries to the appropriate directories.
