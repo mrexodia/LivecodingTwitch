@@ -12,6 +12,19 @@ struct ChatConfig
     QString welcome;
 };
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#include <QtGui/qtextdocument.h>
+#endif //QT_VERSION
+
+inline static QString EscapeHtml(const QString & string)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    return string.toHtmlEscaped();
+#else
+    return Qt::escape(string);
+#endif //QT_VERSION
+}
+
 class ChatBot : public QObject
 {
     Q_OBJECT

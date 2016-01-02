@@ -2,7 +2,6 @@
 #include "ui_MainWindow.h"
 #include <QScrollBar>
 #include <QMessageBox>
-#include <QtGui/qtextdocument.h>
 
 MainWindow::MainWindow(const ChatConfig & livecoding, const ChatConfig & twitch, QWidget* parent)
     : QMainWindow(parent),
@@ -120,7 +119,7 @@ void MainWindow::on_buttonConnectTwitch_clicked()
 void MainWindow::on_buttonSend_clicked()
 {
     QString message = ui->editMessage->text();
-    addLogMessage(QString("<b>me</b> %1").arg(Qt::escape(message)));
+    addLogMessage(QString("<b>me</b> %1").arg(EscapeHtml(message)));
     ui->editMessage->clear();
     if(mLivecodingBot)
         mLivecodingBot->SendMessage(message);

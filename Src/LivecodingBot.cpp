@@ -66,7 +66,7 @@ void LivecodingBot::handleXmppMessage(QXmppMessage message)
         return;
     QString username = jid.right(jid.length() - idx - 1);
     if(username != mConfig.user)
-        messageReceived(username, Qt::escape(message.body()));
+        messageReceived(username, EscapeHtml(message.body()));
 }
 
 void LivecodingBot::handleXmppConnect()

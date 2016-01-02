@@ -62,7 +62,7 @@ void TwitchBot::SendMessage(const QString & message)
     {
         mMessageQueue.append(message);
 #ifdef _DEBUG
-        addLogMessage(QString("[Twitch] Queued message %1").arg(Qt::escape(message)));
+        addLogMessage(QString("[Twitch] Queued message %1").arg(EscapeHtml(message)));
 #endif //_DEBUG
     }
     mMessagesSent++;
@@ -134,7 +134,7 @@ void TwitchBot::processIrcMessage(IrcMessage* message)
     case IrcMessage::Private:
     {
         auto priv = (IrcPrivateMessage*)message;
-        messageReceived(priv->nick(), Qt::escape(priv->content()));
+        messageReceived(priv->nick(), EscapeHtml(priv->content()));
     }
     break;
 
